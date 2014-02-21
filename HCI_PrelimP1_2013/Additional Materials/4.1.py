@@ -2,14 +2,15 @@ def numSyllables(line):
 	syllableCount = 0
 	words = line.split(' ')
 	for word in words:
-		if word[-1] == ',' or word[-1] == '.':
-			word = word[:-1] #trim away the , and . in each word
+		word = word.rstrip(",.()-")
+		#if word[-1] == ',' or word[-1] == '.':
+			#word = word[:-1] #trim away the , and . in each word
 		
 		vowelCount = 0
 		vowels = ['a','e','i','o','u','y','A','E','I','O','U','Y']
 		for i in range(len(word)): #count number of vowels in each word
 			if word[i] in vowels:
-				if word[i-1] in vowels:
+				if word[i-1] in vowels and i >= 1:
 					#is part of a group vowel
 					pass
 				else:
@@ -44,6 +45,9 @@ with open("PAS.txt",'r') as infile:
 	for i, line in enumerate(infile):
 		line = line[:-1] #trim away the \n from each line
 		
+		#print(numSyllables(line))
+		#if i == 2:
+			#print(numSyllables(line))
 		if 0 <= i <= 9:
 			firstLines.append(line)
 		elif midPos <= i <= midPos + 9:
@@ -56,10 +60,17 @@ with open("PAS.txt",'r') as infile:
 numPSW = 0
 
 for line in testLines:
-	if numSyllables(line) >= 3:
-		numPSW += 1
+	words = line.split(' ')
+	numPSWInLine = 0
+	for word in words:
+		if numSyllables(word) >= 3:
+			numPSW += 1
+			numPSWInLine += 1
+	print(numPSWInLine, line)
 sqrtPSW = numPSW ** 0.5
 SMOG = sqrtPSW + 3
+
+#print(numSyllables(""))
 
 print("Sample text name: PAS.txt")
 print("No. of PSW: " + str(numPSW))
